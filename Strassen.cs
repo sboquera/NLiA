@@ -46,6 +46,18 @@ namespace NLiA
                 double[,] P6 = Strassen.strassen(Strassen.sub(A21, A11), Strassen.add(B11, B12));
                 double[,] P7 = Strassen.strassen(Strassen.sub(A12, A22), Strassen.add(B21, B22));
 
+                double[,] C11 = Strassen.sub(Strassen.add(P1, Strassen.add(P4, P7)), P5);
+                double[,] C12 = Strassen.add(P3, P5);
+                double[,] C21 = Strassen.add(P2, P4);
+                double[,] C22 = Strassen.sub(Strassen.add(P1, Strassen.add(P3, P6)), P2);
+
+
+                Strassen.join(result, C11, 0, middlePointY, 0, middlePointX);
+                Strassen.join(result, C12, 0, middlePointY, middlePointX + 1, lengthX - 1);
+                Strassen.join(result, C21, middlePointY + 1, lengthY - 1, 0, middlePointX);
+                Strassen.join(result, C22, middlePointY + 1, lengthY - 1, middlePointX + 1, lengthX - 1);
+
+                
                 return result;
             }
             catch (Exception e) {
@@ -170,6 +182,36 @@ namespace NLiA
             }
         }
 
+        private static double[,] join(double[,] parent, double[,] child, int r1, int r2, int c1, int c2)
+        {
+            try
+            {
+                // Validate
+                if (!Strassen.joinIsValid(parent, r1, r2, c1, c2)) throw new Exception("Join indices are outside of the bounds of the parent array");
+                if (!Strassen.boundIsValid(child, r1, r2, c1, c2)) throw new Exception("Child matrix is not of the correct size");
+
+                // Declare variables
+                int pLengthY = (r2 - r1) + 1;
+                int pLengthX = (c2 - c1) + 1;
+                
+                double[,] result = new double[parent.GetLength(0), parent.GetLength(1)];
+
+                for (int crow = 0; crow < pLengthY; crow++)
+                {
+                    for (int ccol = 0; ccol < pLengthX; ccol++)
+                    {
+                        parent[r1 + crow, c1 + ccol] = child[crow, ccol];   
+                    }
+                }
+
+                return parent;
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+                throw new Exception(e.Message);
+            }
+        }
+
         private static bool isSquare(double[,] ma) {
             int aLengthY = ma.GetLength(0);
             int aLengthX = ma.GetLength(1);
@@ -216,6 +258,34 @@ namespace NLiA
             if (c2 < 0 || c2 > aLastCol) return false;
             if (r2 < r1) return false;
             if (c2 < c1) return false;
+
+            return true;
+        }
+
+        private static bool joinIsValid(double[,] ma, int r1, int r2, int c1, int c2)
+        {
+            int aLastRow = ma.GetLength(0) - 1;
+            int aLastCol = ma.GetLength(1) - 1;
+
+            if (r1 < 0 || r1 > aLastRow) return false;
+            if (r2 < 0 || r2 > aLastRow) return false;
+            if (c1 < 0 || c1 > aLastCol) return false;
+            if (c2 < 0 || c2 > aLastCol) return false;
+            if (r2 < r1) return false;
+            if (c2 < c1) return false;
+
+            return true;
+        }
+
+        private static bool boundIsValid(double[,] ma, int r1, int r2, int c1, int c2)
+        {
+            int lengthY = ma.GetLength(0);
+            int lengthX = ma.GetLength(1);
+            int pLengthY = (r2 - r1) + 1;
+            int pLengthX = (c2 - c1) + 1;
+
+            if (lengthY != pLengthY) return false;
+            if (lengthX != pLengthX) return false;
 
             return true;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NLiA
 {
-    public static class RandomMatrixGenerator
+    public static class MatrixGenerator
     {
         private static Random rand = new Random();
 

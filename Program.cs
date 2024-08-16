@@ -5,11 +5,6 @@
         static void Main(string[] args)
         {
             
-            
-
-
-            //Strassen.print(ma);
-            //Strassen.print(mb);
 
         }
     }

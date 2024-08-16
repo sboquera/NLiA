@@ -23,5 +23,21 @@ namespace NLiA
 
             return result;
         }
+
+        public static double[,] randomSquared(int num)
+        {
+            return random(num, num);
+        }
+
+        public static double[,] identity(int num)
+        {
+            double[,] result = new double[num, num];
+
+            for(int i = 0; i < num; i++){
+                result[i, i] = 1;
+            }
+
+            return result;
+        }
     }
 }

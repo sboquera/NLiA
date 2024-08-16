@@ -84,7 +84,7 @@ namespace NLiA
                         result[crow, ccol] = 0;
                         for (int i = 0; i < ma.GetLength(1); i++)
                         {
-                            result[crow, ccol] = ma[crow, i] * mb[i, ccol];
+                            result[crow, ccol] += ma[crow, i] * mb[i, ccol];
                         }
                     }
                 }

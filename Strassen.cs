@@ -12,15 +12,39 @@ namespace NLiA
         {
             try
             {
+                // Validate
                 if (!Strassen.isSquare(ma)) throw new Exception("Square matrix ma must be squared");
                 if (!Strassen.isSquare(mb)) throw new Exception("Square matrix mb must be squared");
                 if (!Strassen.productIsValid(ma, mb)) throw new Exception("Matrix sizes are not compatible for matrix multiplication");
                 
+                // Declare variables
                 double[,] result = new double[ma.GetLength(0), ma.GetLength(1)];
-
+                int lengthY = ma.GetLength(0);
+                int lengthX = ma.GetLength(1);
+                int middlePointY = (lengthY / 2) - 1;
+                int middlePointX = (lengthX / 2) - 1;
                 
+                // Handle base case
+                if(lengthX <= 4) return Strassen.mul(ma, mb);
 
+                // Handle general case
+                double[,] A11 = Strassen.split(ma, 0, middlePointY, 0, middlePointX);
+                double[,] A12 = Strassen.split(ma, 0, middlePointY, middlePointX + 1, lengthX - 1);
+                double[,] A21 = Strassen.split(ma, middlePointY + 1, lengthY - 1, 0, middlePointX);
+                double[,] A22 = Strassen.split(ma, middlePointY + 1, lengthY - 1, middlePointX + 1, lengthX - 1);
 
+                double[,] B11 = Strassen.split(mb, 0, middlePointY, 0, middlePointX);
+                double[,] B12 = Strassen.split(mb, 0, middlePointY, middlePointX + 1, lengthX - 1);
+                double[,] B21 = Strassen.split(mb, middlePointY + 1, lengthY - 1, 0, middlePointX);
+                double[,] B22 = Strassen.split(mb, middlePointY + 1, lengthY - 1, middlePointX + 1, lengthX - 1);
+
+                double[,] P1 = Strassen.strassen(Strassen.add(A11, A22), Strassen.add(B11, B22));
+                double[,] P2 = Strassen.strassen(Strassen.add(A21, A22), B11);
+                double[,] P3 = Strassen.strassen(A11, Strassen.sub(B12, B22));
+                double[,] P4 = Strassen.strassen(A22, Strassen.sub(B21, B11));
+                double[,] P5 = Strassen.strassen(Strassen.add(A11, A12), B22);
+                double[,] P6 = Strassen.strassen(Strassen.sub(A21, A11), Strassen.add(B11, B12));
+                double[,] P7 = Strassen.strassen(Strassen.sub(A12, A22), Strassen.add(B21, B22));
 
                 return result;
             }
@@ -84,6 +108,35 @@ namespace NLiA
                 return result;
             }
             catch (Exception e) {
+                Console.WriteLine(e.Message);
+                throw new Exception(e.Message);
+            }
+        }
+        
+        public static double[,] sub(double[,] ma, double[,] mb)
+        {
+            try
+            {
+                // Validate
+                if (!Strassen.additionIsValid(ma, mb)) throw new Exception("Matrix sizes are not compatible for addition");
+
+                // Declare variables
+                double[,] result = new double[ma.GetLength(0), ma.GetLength(1)];
+
+                // Compute addition
+                for (int crow = 0; crow < ma.GetLength(0); crow++)
+                {
+                    for (int ccol = 0; ccol < ma.GetLength(1); ccol++)
+                    {
+                        result[crow, ccol] = ma[crow, ccol] - mb[crow, ccol];
+                    }
+                }
+
+
+                return result;
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine(e.Message);
                 throw new Exception(e.Message);
             }

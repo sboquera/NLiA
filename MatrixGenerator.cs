@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NLiA
 {
-    public static class RandomMatrixGenerator
+    public static class MatrixGenerator
     {
         private static Random rand = new Random();
 
@@ -39,5 +39,19 @@ namespace NLiA
 
             return result;
         }
+
+        public static double[,] upperDiagonal(int num) {
+            double[,] result = new double[num, num];
+            for (int crow = 0; crow < num; crow++)
+            {
+                for (int ccol = crow; ccol < num; ccol++)
+                {
+                    result[crow, ccol] = rand.NextDouble();
+                }
+            }
+
+            return result;
+        }
+
     }
 }

@@ -19,12 +19,13 @@ namespace NLia
             this.columns = matrix.GetLength(1);
             this.matrix = matrix;
             this.rref = new double[rows, columns];
-
+            
         }
 
-        public int findPivot(int column)
+        // find pivot
+        public int findPivot(int column, int row)
         {
-            for (int crow = 0; crow < rows; crow++) 
+            for (int crow = row; crow < rows; crow++) 
             { 
                 if(matrix[crow, column] != 0) return crow;
             }
@@ -32,19 +33,43 @@ namespace NLia
             return -1;
         }
 
+
+
         public double[,] process()
         {
-
+            int crow = 0;
             for (int ccol = 0; ccol < columns; ccol++) {
-                    
+                
+                // find pivot
+                int pivotRow = findPivot(ccol, crow);
+              
+                if(pivotRow != -1) {
+                    reduceColumn(ccol, pivotRow);
+                    crow++;
+                }
             }
 
             return rref;
         }
-        
 
-        
-
+        public void reduceColumn(int column, int pivotPosition)
+        {
+            for (int crow = 0; crow < rows; crow++) {
+                if(crow != pivotPosition)
+                {
+                    if (matrix[crow, column] != 0)
+                    {
+                        double scalarValue = (-1) * matrix[crow, column] / matrix[pivotPosition, column];
+                        ElementaryOperations.addScaledRow(matrix, scalarValue, pivotPosition, crow);
+                    }
+                }
+                else
+                {
+                    double scalarValue = 1 / matrix[crow, column];
+                    ElementaryOperations.scaleRow(matrix, scalarValue, pivotPosition);
+                }
+            }
+        }
 
     }
 }

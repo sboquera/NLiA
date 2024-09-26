@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,10 +47,14 @@ namespace NLia
             int rows = matrix.GetLength(0);
             int columns = matrix.GetLength(1);
 
-
+            
             if (baseRow >= rows) throw new Exception($"Can't scale a row with index greater than {rows}");
             if (targetRow >= rows) throw new Exception($"Can't scale a row with index greater than {rows}");
 
+            // handle trivial case
+            if (baseRow == targetRow) return matrix;
+
+            // handle non trivial case
             for (int ccol = 0; ccol < columns; ccol++)
             {
                 double temp = matrix[baseRow, ccol];

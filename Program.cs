@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System;
 using System.Globalization;
+using NLia;
 
 namespace NLiA
 {
@@ -8,13 +9,12 @@ namespace NLiA
     {
         static void Main(string[] args)
         {
+            double[,] i3 = MatrixGenerator.identity(3);
+            double[,] random3 = MatrixGenerator.randomSquared(3);
             
-<<<<<<< HEAD
-            
-            
-=======
->>>>>>> a2db4551c6dbff1f784b2129f2d41ea9d5574b21
-
+            ElementaryOperations.print(random3);
+            ElementaryOperations.permutate(random3, 0, 2);
+            ElementaryOperations.print(random3);
         }
     }
 }

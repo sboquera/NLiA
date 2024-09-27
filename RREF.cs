@@ -18,7 +18,7 @@ namespace NLia
             this.rows = matrix.GetLength(0);
             this.columns = matrix.GetLength(1);
             this.matrix = matrix;
-            this.rref = new double[rows, columns];
+            this.rref = (double[,]) matrix.Clone();
             
         }
 
@@ -27,7 +27,7 @@ namespace NLia
         {
             for (int crow = row; crow < rows; crow++) 
             { 
-                if(matrix[crow, column] != 0) return crow;
+                if(rref[crow, column] != 0) return crow;
             }
 
             return -1;
@@ -57,16 +57,16 @@ namespace NLia
             for (int crow = 0; crow < rows; crow++) {
                 if(crow != pivotPosition)
                 {
-                    if (matrix[crow, column] != 0)
+                    if (rref[crow, column] != 0)
                     {
-                        double scalarValue = (-1) * matrix[crow, column] / matrix[pivotPosition, column];
-                        ElementaryOperations.addScaledRow(matrix, scalarValue, pivotPosition, crow);
+                        double scalarValue = (-1) * rref[crow, column] / rref[pivotPosition, column];
+                        ElementaryOperations.addScaledRow(rref, scalarValue, pivotPosition, crow);
                     }
                 }
                 else
                 {
-                    double scalarValue = 1 / matrix[crow, column];
-                    ElementaryOperations.scaleRow(matrix, scalarValue, pivotPosition);
+                    double scalarValue = 1 / rref[crow, column];
+                    ElementaryOperations.scaleRow(rref, scalarValue, pivotPosition);
                 }
             }
         }

@@ -16,9 +16,9 @@ namespace NLiA
                 { 8, 4, 5 },
             };
             double[,] r2 = new double[,] {
-                { 6, 2, -2, 1 },
-                { 2, 1, 3, 1 },
-                { 8, 4, 5, 1 },
+                { 6, 2, -2 },
+                { 2, 1, 3 },
+                { 14, 5, -1 },
             };
             double[,] r3 = new double[,] {
                 { 23, 18, -10, 4, -8 },
@@ -28,9 +28,9 @@ namespace NLiA
                 { 20, 54, -10, 4, -23 },
             };
 
-            RREF reducer = new RREF(r3);
+            LU reducer = new LU(r1);
             reducer.process();
-            ElementaryOperations.print(r3);
+            ElementaryOperations.print(reducer.L);
         }
     }
 }
